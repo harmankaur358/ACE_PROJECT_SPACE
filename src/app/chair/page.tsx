@@ -1,7 +1,16 @@
 import ChairHeader from '@/components/chairHeader';
 import ChairNavigation from '@/components/chairNav';
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
+import CustomSignOutButton from "@/components/signoutbutton";
 
-export default function ChairPage() {
+export default async function ChairPage() {
+    const { userId } = await auth();
+
+    if (!userId) {
+        redirect("/sign-in");
+    }
+
     return (
         <div className="bg-slate-50 min-h-screen">
             <ChairHeader />
@@ -15,4 +24,5 @@ export default function ChairPage() {
             </div>
         </div>
     );
+
 }
