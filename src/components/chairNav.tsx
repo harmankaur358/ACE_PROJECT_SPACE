@@ -5,7 +5,7 @@ export default function ChairNavigation() {
     const profileImg = "/profile.png";
 
     return (
-        <div className="flex flex-col gap-4 border rounded p-4">
+        <div className="flex flex-col gap-4 border rounded p-4 min-h-screen">
             <div className="flex flex-col gap-4">
                 <Link href={`/chair`} className="border rounded bg-red-500">Home</Link>
                 <Link href={`/chair/nominations`} className="border rounded bg-red-500">View Nominations</Link>
