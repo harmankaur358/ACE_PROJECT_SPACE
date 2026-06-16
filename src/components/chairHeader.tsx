@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 export default function ChairHeader() {
-    const notificationBell = "/../../public/notification_bell.png";
+    const notificationBell = "/notificationBell.png";
 
     return (
         <div className="flex justify-between items-center p-5">
