@@ -1,18 +1,87 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
 }
-
+ 
+enum UserRole {
+  chair
+  client
+  instructor
+}
+ 
+enum NominationType {
+  cybersecurity
+  development
+}
+ 
 model User {
-  userId Int  @id
-  firstName String
+  id               String   @id @default(cuid())
+  clerkId          String   @unique
+  email            String   @unique
+  role             UserRole
+  fullName         String?
+  organizationName String?
+  phoneNumber      String?
+  profileCompleted Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+ 
+  clientNominations Nomination[] @relation("ClientNominations")
+  drafts            Draft[]
+}
+ 
+model Nomination {
+  id        String         @id @default(cuid())
+  clientId  String
+  type      NominationType
+  term      String
+  formData  Json
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+ 
+  client    User                 @relation("ClientNominations", fields: [clientId], references: [id], onDelete: Restrict)
+  documents NominationDocument[]
+ 
+  @@index([clientId])
+}
+ 
+model NominationDocument {
+  id           String   @id @default(cuid())
+  nominationId String
+  fileName     String
+  fileUrl      String
+  fileType     String?
+  fileSize     Int?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+ 
+  nomination Nomination @relation(fields: [nominationId], references: [id], onDelete: Cascade)
+ 
+  @@index([nominationId])
+}
+ 
+model Draft {
+  id        String   @id @default(cuid())
+  clientId  String
+  formData  Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+ 
+  client User @relation(fields: [clientId], references: [id], onDelete: Cascade)
+ 
+  @@index([clientId])
+}
+
+model Inquiry {
+  id                String   @id @default(cuid())
+  firstName         String
+  lastName          String
+  email             String
+  organizationInfo  String
+  projectInfo       String
+  isRead            Boolean  @default(false)
+  createdAt         DateTime @default(now())
 }
