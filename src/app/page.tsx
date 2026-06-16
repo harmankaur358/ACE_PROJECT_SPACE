@@ -26,8 +26,8 @@ export default function HomePage() {
               src="/rrc_logo.jpg"
               alt="RRC Polytech Logo"
               width={80}
-              height={80}
-              className="h-auto w-20"
+              height={100}
+              className="absolute top-4 right-8 h-auto w-20"
             />
           </div>
 
