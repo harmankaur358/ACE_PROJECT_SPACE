@@ -4,21 +4,23 @@ import { prisma } from "@/lib/prisma";
 
 export async function createInquiry(formData: FormData) {
   try {
+    // Fetching all the values from form
     const name = formData.get("name") as string;
     const email = formData.get("email") as string;
-    const organizationName = formData.get("organizationName") as string;
-    const projectOverview = formData.get("projectOverview") as string;
+    const organizationInfo = formData.get("organizationName") as string;
+    const projectInfo = formData.get("projectOverview") as string;
 
     const [firstName, ...lastParts] = (name || "").trim().split(" ");
     const lastName = lastParts.join(" ") || "";
 
+    // Creating inquiry in db
     await prisma.inquiry.create({
       data: {
         firstName,
         lastName,
         email,
-        organizationInfo: organizationName,
-        projectInfo: projectOverview,
+        organizationInfo,
+        projectInfo,
         isRead: false,
       },
     });
