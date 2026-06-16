@@ -8,6 +8,13 @@ export default function SignInPage() {
          routing="path"
          path="/sign-in"
         forceRedirectUrl="/chair"
+        appearance={{
+          elements: {
+            footerAction: {
+              display: "none",
+            },
+          },
+        }}
         />
       </div>
     </main>
