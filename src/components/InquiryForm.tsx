@@ -26,12 +26,18 @@ export default function InquiryForm() {
       )} 
  
       <input
-        name="name"
-        placeholder="Name"
+        name="firstname"
+        placeholder="FirstName"
         className="w-full rounded border p-2"
         required
       />
- 
+      <input
+        name="lastname"
+        placeholder="LastName"
+        className="w-full rounded border p-2"
+        required
+      />
+
       <input
         name="email"
         type="email"
