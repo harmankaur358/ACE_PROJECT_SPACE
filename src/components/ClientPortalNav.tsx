@@ -5,10 +5,12 @@ import { usePathname } from "next/navigation";
 import {
   ChevronLeft,
   ChevronRight,
+  CircleHelp,
   ClipboardList,
   FilePlus2,
   Files,
   Home,
+  UserCircle,
 } from "lucide-react";
 
 type ClientPortalNavProps = {
@@ -33,9 +35,22 @@ const links = [
     icon: ClipboardList,
   },
   {
-    href: "/client/drafts",
+    href: "/client/draft",
     label: "Drafts",
     icon: Files,
+  },
+];
+
+const bottomLinks = [
+  {
+    href: "/client/profile",
+    label: "Profile",
+    icon: UserCircle,
+  },
+  {
+    href: "/client/about",
+    label: "About",
+    icon: CircleHelp,
   },
 ];
 
@@ -57,10 +72,49 @@ function isActiveLink(pathname: string, href: string) {
   }
 
   if (href === "/client/drafts") {
-    return pathname === "/client/drafts" || pathname.startsWith("/client/drafts/");
+    return pathname === "/client/draft" || pathname.startsWith("/client/draft/");
+  }
+
+  if (href === "/client/profile") {
+    return pathname === "/profile";
+  }
+
+  if (href === "/client/about") {
+    return pathname === "/client/about";
   }
 
   return pathname === href;
+}
+
+function NavLink({
+  href,
+  label,
+  icon: Icon,
+  isOpen,
+  isActive,
+}: {
+  href: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string; "aria-hidden"?: boolean }>;
+  isOpen: boolean;
+  isActive: boolean;
+}) {
+  return (
+    <Link
+      href={href}
+      title={label}
+      className={`flex min-h-10 items-center gap-3 rounded-md px-3 text-sm font-semibold transition ${
+        isOpen ? "justify-start" : "justify-center"
+      } ${
+        isActive
+          ? "bg-red-50 text-red-700"
+          : "text-slate-700 hover:bg-slate-100 hover:text-slate-950"
+      }`}
+    >
+      <Icon className="h-5 w-5 shrink-0" aria-hidden={true} />
+      {isOpen ? <span>{label}</span> : null}
+    </Link>
+  );
 }
 
 export default function ClientPortalNav({
@@ -102,30 +156,33 @@ export default function ClientPortalNav({
           )}
         </button>
 
-        <nav className="flex flex-col gap-1 px-2 py-6" aria-label="Client">
-          {links.map((link) => {
-            const Icon = link.icon;
-            const isActive = isActiveLink(pathname, link.href);
-
-            return (
-              <Link
+        <div className="flex h-full flex-col justify-between px-2 py-6">
+          <nav className="flex flex-col gap-1" aria-label="Client">
+            {links.map((link) => (
+              <NavLink
                 key={link.href}
                 href={link.href}
-                title={link.label}
-                className={`flex min-h-10 items-center gap-3 rounded-md px-3 text-sm font-semibold transition ${
-                  isOpen ? "justify-start" : "justify-center"
-                } ${
-                  isActive
-                    ? "bg-red-50 text-red-700"
-                    : "text-slate-700 hover:bg-slate-100 hover:text-slate-950"
-                }`}
-              >
-                <Icon className="h-5 w-5 shrink-0" aria-hidden="true" />
-                {isOpen ? <span>{link.label}</span> : null}
-              </Link>
-            );
-          })}
-        </nav>
+                label={link.label}
+                icon={link.icon}
+                isOpen={isOpen}
+                isActive={isActiveLink(pathname, link.href)}
+              />
+            ))}
+          </nav>
+
+          <nav className="flex flex-col gap-1" aria-label="Client secondary">
+            {bottomLinks.map((link) => (
+              <NavLink
+                key={link.href}
+                href={link.href}
+                label={link.label}
+                icon={link.icon}
+                isOpen={isOpen}
+                isActive={isActiveLink(pathname, link.href)}
+              />
+            ))}
+          </nav>
+        </div>
       </aside>
     </>
   );
